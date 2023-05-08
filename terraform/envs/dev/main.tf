@@ -1,3 +1,18 @@
+module "alb" {
+  source             = "../../modules/alb"
+  env                = local.env
+  project_name       = local.project_name
+  vpc_id             = module.network.vpc.id
+  vpc_cidr_block     = module.network.vpc.cidr_block
+  subnet_public_a_id = module.network.subnet_public_a.id
+  subnet_public_c_id = module.network.subnet_public_c.id
+}
+
+module "ecr" {
+  source = "../../modules/ecr"
+  env    = local.env
+  project_name = local.project_name
+}
 
 module "network" {
   source                      = "../../modules/network"
@@ -13,12 +28,3 @@ module "network" {
   subnet_private_c_cidr_block = "10.0.5.0/24"
 }
 
-module "alb" {
-  source             = "../../modules/alb"
-  env                = local.env
-  project_name       = local.project_name
-  vpc_id             = module.network.vpc.id
-  vpc_cidr_block     = module.network.vpc.cidr_block
-  subnet_public_a_id = module.network.subnet_public_a.id
-  subnet_public_c_id = module.network.subnet_public_c.id
-}
