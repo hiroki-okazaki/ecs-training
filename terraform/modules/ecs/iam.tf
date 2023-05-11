@@ -48,7 +48,7 @@ resource "aws_iam_role_policy" "execution" {
       {
         Effect = "Allow"
         Action = [
-          "ssm:GetParameters",
+          "secretsmanager:GetSecretValue",
         ]
         Resource = "*"
       },
@@ -57,7 +57,7 @@ resource "aws_iam_role_policy" "execution" {
         Action = [
           "secretsmanager:GetSecretValue",
         ]
-        Resource = var.secret_manager_arn
+        Resource = var.secretsmanager_arn
       },
     ]
   })

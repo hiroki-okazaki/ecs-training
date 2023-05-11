@@ -4,13 +4,14 @@ resource "aws_ecs_task_definition" "main" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
+  skip_destroy             = true // 旧リビジョンを残す
   execution_role_arn       = aws_iam_role.execution.arn
   task_role_arn            = aws_iam_role.task.arn
 
   container_definitions = jsonencode([
     {
       name      = "backend-api-container"
-      image     = var.api_image_tag
+      image     = "${var.ecr_url}:${var.api_image_tag}"
       essential = true
 
       logConfiguration = {
@@ -21,6 +22,16 @@ resource "aws_ecs_task_definition" "main" {
           awslogs-stream-prefix = "ecs",
         }
       }
+
+      environment = [
+        { name : "ENV", value : "dev" }
+      ]
+      secrets = [
+        {
+          name      = "APP_ENV"
+          valueFrom = "${var.secretsmanager_arn}:APP_ENV::"
+        },
+      ]
 
       portMappings = [
         {

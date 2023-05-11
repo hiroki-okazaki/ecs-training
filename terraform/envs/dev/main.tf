@@ -26,9 +26,11 @@ module "ecs" {
   desired_count         = 0
   target_group_arn      = module.alb.target_group_arn
   alb_security_group_id = module.alb.security_group_id
-  secret_manager_arn    = "*"
   ecr_arn               = module.ecr.repository_arn
-  api_image_tag         = "${data.aws_caller_identity.main.account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-ecs-test:v13"
+  ecr_url               = module.ecr.repository_url
+  api_image_tag         = "v13"
+  task_revision         = "32"
+  secretsmanager_arn    = module.secret-manager.this.arn
 }
 
 module "network" {
@@ -45,3 +47,8 @@ module "network" {
   subnet_private_c_cidr_block = "10.0.5.0/24"
 }
 
+module "secret-manager" {
+  source       = "../../modules/secrets-manager"
+  env          = local.env
+  project_name = local.project_name
+}

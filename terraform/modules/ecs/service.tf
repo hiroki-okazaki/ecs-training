@@ -1,9 +1,12 @@
 resource "aws_ecs_service" "main" {
-  name            = "${var.env}-${var.project_name}-ecs-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.main.arn
-  desired_count   = var.desired_count
-  launch_type     = "FARGATE"
+  name             = "${var.env}-${var.project_name}-ecs-service"
+  cluster          = aws_ecs_cluster.main.id
+  task_definition  = "${aws_ecs_task_definition.main.arn_without_revision}:${var.task_revision}"
+  desired_count    = var.desired_count
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
+
+  deployment_minimum_healthy_percent = 50
 
   network_configuration {
     subnets          = [var.subnet_service_a_id, var.subnet_service_c_id]

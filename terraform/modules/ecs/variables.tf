@@ -30,14 +30,22 @@ variable "alb_security_group_id" {
   type = string
 }
 
-variable "secret_manager_arn" {
-  type = string
-}
-
 variable "ecr_arn" {
   type = string
 }
 
+variable "ecr_url" {
+  type = string
+}
+
 variable "api_image_tag" {
+  type = string
+}
+
+variable "task_revision" {
+  type = string
+}
+
+variable "secretsmanager_arn" {
   type = string
 }
